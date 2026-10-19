@@ -1,8 +1,20 @@
 <div dir="rtl">
 
+# פתרון aguda_forms
+
+הפתרון כולל את הרכיבים הבאים:
+
+| רכיב | סוג | תיאור | קובץ |
+|---|---|---|---|
+| **Activate StudentsV3** | זרימת ענן | מלווה משתמשים בהפעלת החשבון ובמעבר ל־MFA עם Authenticator (סעיפים 1–7) | [ActivateStudentsV3-….json](src/Workflows/ActivateStudentsV3-FCF4A396-A6CB-F111-A05A-6045BD99F2BC.json) |
+| **AddUserToGroup** | זרימת Desktop | מוסיפה משתמש לקבוצת MFA ב־AD המקומי. נקראת מ־Activate StudentsV3 (סעיף 3.4) | [AddUserToGroup-….json](src/Workflows/AddUserToGroup-3853C697-378D-461C-BED5-D7773CDC8C0B.json) |
+| **AgudaForm** | Canvas App | טופס אישור חברות באגודת הסטודנטים עם חתימה דיגיטלית (סעיף 8) | [src/CanvasApps/](src/CanvasApps/) |
+
+---
+
 # Activate StudentsV3 – אוטומציה להפעלת חשבונות
 
-זרימת Power Automate (בפתרון `aguda_forms`) שמלווה משתמשים במכללת סמינר הקיבוצים בהפעלת החשבון ובמעבר ל־MFA עם Microsoft Authenticator. היא מטפלת גם במשתמשים שהחשבון שלהם סומן כחשוד.
+זרימת Power Automate שמלווה משתמשים במכללת סמינר הקיבוצים בהפעלת החשבון ובמעבר ל־MFA עם Microsoft Authenticator. היא מטפלת גם במשתמשים שהחשבון שלהם סומן כחשוד.
 
 קובץ הזרימה: [src/Workflows/ActivateStudentsV3-FCF4A396-A6CB-F111-A05A-6045BD99F2BC.json](src/Workflows/ActivateStudentsV3-FCF4A396-A6CB-F111-A05A-6045BD99F2BC.json)
 
@@ -93,7 +105,7 @@
 
 3. **הוספה לקבוצת MFA:**
    - שליפת `onPremisesDistinguishedName` של המשתמש מ־Microsoft Graph.
-   - הרצת זרימת Power Automate Desktop (`3853c697-378d-461c-bed5-d7773cdc8c0b`, unattended), שמוסיפה את המשתמש לקבוצה `CN=G-MFA-Enabled,OU=Groups,OU=Cloud,DC=smkb,DC=ac,DC=il` ב־AD המקומי.
+   - הרצת זרימת Power Automate Desktop `AddUserToGroup` (`3853c697-378d-461c-bed5-d7773cdc8c0b`, unattended, [בקובץ](src/Workflows/AddUserToGroup-3853C697-378D-461C-BED5-D7773CDC8C0B.json)), שמוסיפה את המשתמש לקבוצה `CN=G-MFA-Enabled,OU=Groups,OU=Cloud,DC=smkb,DC=ac,DC=il` ב־AD המקומי.
 4. **במקביל:** הזרימה ממתינה **4 ימים**, ואז מוסיפה את המשתמש לקבוצת MFA **בכל מקרה**, גם אם לא סיים. הריצה מסתיימת ב־**Succeeded**.
 
 ### ערך אחר ב־`Para`
@@ -180,12 +192,73 @@
 3. **`CallAddUserToGroup` / `CallAddUserToGroup_2` לעולם לא רצות.** הן מוגדרות לרוץ אחרי `Terminate`, ואחרי `Terminate` הזרימה לא ממשיכה.
 4. **הטיימרים מבטלים ריצות שעדיין ממתינות.** אחרי 7 ימים (newuser) או 4 ימים (MSAuthenticator) הריצה מסתיימת. לחיצה על כפתור במייל אחרי הזמן הזה לא תעשה כלום.
 5. **פרטי גישה כתובים בגלוי בזרימה.** שם המשתמש והסיסמה של Soprano נמצאים בכתובת של קריאת ה־SMS, ויש חתימות SAS (`sig=`) בכתובות של הזרימות החיצוניות. מומלץ להעביר אותם למשתני סביבה או ל־Azure Key Vault ולהחליף אותם. **בקובץ שבמאגר הסודות האלה, וגם ה־client secret של Graph, הוחלפו ב־`<REDACTED>`.** לפני ייבוא הפתרון מהמאגר צריך להחזיר אותם.
+   - **גם בזרימת `AddUserToGroup`** שם המשתמש והסיסמה (המוצפנת) של חשבון השירות שמתחבר ל־AD הוחלפו ב־`<REDACTED>`, גם ב־`.data.xml` וגם בחבילה המקודדת ב־`.json`. אחרי ייבוא צריך להזין אותם מחדש ב־Power Automate Desktop.
+   - **באפליקציית AgudaForm** (בתוך ה־`.msapp`) הוסרו כתובת המייל של משתמש הבדיקה וחתימת ה־SAS (`sig=`) של קישור ה־blob לתמונת הלוגו.
 6. **`Get_file_content` במסלול MSAuthenticator** שולפת קובץ מ־OneDrive, אבל אף פעולה לא משתמשת בתוצאה.
 7. **`backuser`** מוגדר כמסלול, אבל הוא ריק.
 
 ---
 
-## 8. תלויות
+# AgudaForm – אפליקציית אישור חברות באגודה
+
+## 8. אפליקציית AgudaForm
+
+אפליקציית Canvas (פורמט טלפון, 640×1136) שבה סטודנטים מאשרים חברות באגודת הסטודנטים (דמי רווחה של 250 ש"ח) וחותמים על הצהרה. גרסה נוכחית: **2.6** (מוצגת בפינת מסך הפתיחה).
+
+| | |
+|---|---|
+| שם תצוגה | `AgudaForm` |
+| שם פנימי | `cr10a_agudaform_6de3a` |
+| קבצים | [src/CanvasApps/](src/CanvasApps/). קוד האפליקציה נמצא בתוך `cr10a_agudaform_6de3a_DocumentUri.msapp` (קובץ zip; מסכי ה־YAML בתיקייה `Src/` שבתוכו) |
+| מקור נתונים | זרימת הענן `AgudaForm-StudentEmailQuery` (`c268bac9-8a8f-4dfe-bee5-ad162a13b0b4`). **הזרימה לא נמצאת בפתרון הזה** |
+
+### 8.1 הזרימה `AgudaForm-StudentEmailQuery`
+
+האפליקציה לא ניגשת לנתונים ישירות. כל קריאה וכתיבה עוברות דרך הזרימה, עם שישה פרמטרים:
+
+| פרמטר | ערכים שהאפליקציה שולחת |
+|---|---|
+| `userEmail` | `varUserEmail` |
+| `para` | `Query` (שליפת סטטוס) / `Result` (שמירת אישור) / `Parking` (מנוי חניון, לא בשימוש) |
+| `Status` | `None` / `New` / `Update` |
+| `FormID` | `1`, או ה־`FormID` הקיים בעדכון |
+| `HtmlText` | טקסט ההצהרה המלא (HTML), כולל החתימה |
+| `Signature` | תמונת החתימה (`JSON(..., IncludeBinaryData)`) |
+
+בשאילתה הזרימה מחזירה רשימה עם `StudentName`, `StudentMail`, `StudentStatus`, `StudentApprove`, `FormID`, שנשמרת ב־`colUserData`.
+
+### 8.2 מסכים וזרימת משתמש
+
+1. **Welcome** – בטעינה נשלפים נתוני הסטודנט (`para = Query`). אחרי 3 שניות (טיימר) מופיע הכפתור **"הצטרפות לאגודה"**, שמנתב לפי `StudentApprove`:
+
+| `StudentApprove` | מסך יעד |
+|---|---|
+| `מאושר` | **ScrApprove** – "יש לך כבר אישור לחברות באגודה", קישור לכרטיס סטודנט בפורטל, וכפתור "סיום" |
+| `לא מאושר` | **DeclerationUpdate** – הצהרה עם הודעה "שנה קודמת בחרת לא לשלם" |
+| אחר / אין רשומה | **DeclerationNew** – הצהרה לסטודנט חדש |
+
+   אם הסטטוס לא `מאושר` ולא `לא מאושר`, הכפתור קודם שולף את הנתונים מחדש ורק אז מנתב.
+
+2. **DeclerationNew / DeclerationUpdate** – טקסט ההצהרה, תיבת חתימה (`PenInput`) וכפתור **"אישור"**, שמופעל רק אחרי חתימה. הלחיצה שולחת לזרימה `para = Result` עם `Status = New` או `Update`.
+3. **Finish** – "תודה על הרישום, ניפגש".
+
+### 8.3 מסכים לא פעילים
+
+- **Parking** – רכישת מנוי מוזל לחניון קמפוס נמיר. כל ה־`Navigate(Parking)` בהערה, והכפתור "מנוי לחניון נמיר" במסך הפתיחה מוסתר (`Visible = false`). לפי הודעת ה־commit של גרסה 2.6: "ביטול מסכי ולחצני חנייה".
+- **ScrNotApprove** – הסבר שאינך חבר/ת אגודה וטבלת מחירי חניון. הגישה אליו הייתה רק דרך כפתור החניון המוסתר.
+
+### 8.4 בעיות ידועות באפליקציה
+
+1. **המייל של המשתמש כתוב בקוד.** ב־`Welcome.OnVisible` השורה `Set(varUserEmail, Lower(User().Email))` בהערה, ובמקומה כתובת קבועה של משתמש בדיקה (בקובץ שבמאגר הכתובת הוחלפה ב־`<REDACTED>@smkb.ac.il`). במצב הזה **כל משתמש יראה ויעדכן את הרשומה של משתמש הבדיקה**. חובה להחזיר את `User().Email` לפני פרסום.
+2. **DeclerationUpdate לא ממשיך אחרי אישור.** הכפתור שולח את הנתונים לזרימה, אבל `Navigate` בהערה ואין מעבר ל־Finish. המשתמש נשאר במסך ההצהרה ועלול ללחוץ שוב (ולשלוח שוב).
+3. **הטקסט ב־Welcome עדיין מזכיר את החניון** ("ו/או לרכישת מנוי מוזל לחניון"), למרות שהאפשרות בוטלה.
+4. **שם המשתמש בהצהרה נלקח מ־`First(colUserData)`** ולא מהרשומה שתואמת את `varUserEmail`, בשונה מהניתוב שמשתמש ב־`LookUp`.
+
+---
+
+## 9. תלויות
+
+### Activate StudentsV3
 
 | רכיב | פרטים |
 |---|---|
@@ -198,5 +271,12 @@
 | Soprano | שליחת SMS |
 | זרימות חיצוניות (HTTP trigger) | הוספה ל־gategoing, והוספה לקבוצה (`CallAddUserToGroup`) |
 | תמיכה | `Support.Srv@smkb.ac.il` |
+
+### AgudaForm
+
+| רכיב | פרטים |
+|---|---|
+| Logic flows | הזרימה `AgudaForm-StudentEmailQuery` (מחוץ לפתרון) |
+| Office 365 Outlook, SharePoint, Office 365 Users | חיבורים שהזרימה `AgudaForm-StudentEmailQuery` משתמשת בהם |
 
 </div>

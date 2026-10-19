@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CanvasApp xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>cr10a_agudaform_6de3a</Name>
+  <AppVersion>2026-10-19T10:16:48Z</AppVersion>
+  <Status>Ready</Status>
+  <CreatedByClientVersion>3.26101.10.0</CreatedByClientVersion>
+  <MinClientVersion>3.26101.10.0</MinClientVersion>
+  <Tags>{"primaryDeviceWidth":"640","primaryDeviceHeight":"1136","supportsPortrait":"true","supportsLandscape":"true","primaryFormFactor":"Phone","showStatusBar":"false","publisherVersion":"3.26101.10","minimumRequiredApiVersion":"2.2.0","hasComponent":"false","hasUnlockedComponent":"false","isUnifiedRootApp":"false","sienaVersion":"20261019T101648Z-3.26101.10.0","offlineLargeFilesSupport":"false","m365CopilotSettingValue":"0"}</Tags>
+  <IsCdsUpgraded>0</IsCdsUpgraded>
+  <GalleryItemId xsi:nil="true"></GalleryItemId>
+  <BackgroundColor>RGBA(0,176,240,1)</BackgroundColor>
+  <DisplayName>AgudaForm</DisplayName>
+  <Description xsi:nil="true"></Description>
+  <CommitMessage>ריענון פלואו, ביטול מסכי ולחצני חנייה. 
+2.6</CommitMessage>
+  <Publisher xsi:nil="true"></Publisher>
+  <AuthorizationReferences>[]</AuthorizationReferences>
+  <ConnectionReferences>{"2ff70fe8-450e-4fe9-b5d9-aca45d85595b":{"id":"/providers/microsoft.powerapps/apis/shared_logicflows","displayName":"Logic flows","iconUri":"https://static.powerapps.com/resource/ppcr/releases/v1.0.1827/1.0.1827.4908/logicflows/icon.png","dataSources":["AgudaForm-StudentEmailQuery"],"dependencies":["74e9ed18-7b50-4db3-be81-a933153448da","490ec78c-15a0-4917-b88a-cf9a854bd8c1","0c46c3ce-d9c5-4b26-8c82-1176e15a70d7","74e9ed18-7b50-4db3-be81-a933153448da"],"dependents":[],"parameterHints":{"workflowName":{"value":"c268bac9-8a8f-4dfe-bee5-ad162a13b0b4"},"workflowEntityId":{},"workflowDisplayName":{"value":"AgudaForm-StudentEmailQuery"},"74e9ed18-7b50-4db3-be81-a933153448da":{"value":"shared_office365"},"490ec78c-15a0-4917-b88a-cf9a854bd8c1":{"value":"shared_sharepointonline"},"0c46c3ce-d9c5-4b26-8c82-1176e15a70d7":{"value":"shared_office365users"}},"parameterHintsV2":{"workflowName":{"value":"c268bac9-8a8f-4dfe-bee5-ad162a13b0b4"},"workflowEntityId":{},"workflowDisplayName":{"value":"AgudaForm-StudentEmailQuery"},"shared_office365_2":{"value":"74e9ed18-7b50-4db3-be81-a933153448da"},"shared_sharepointonline":{"value":"490ec78c-15a0-4917-b88a-cf9a854bd8c1"},"shared_office365users":{"value":"0c46c3ce-d9c5-4b26-8c82-1176e15a70d7"},"shared_office365":{"value":"74e9ed18-7b50-4db3-be81-a933153448da"}},"isOnPremiseConnection":false,"bypassConsent":true,"dataSets":{},"apiTier":"Standard","actions":["Run"]},"74e9ed18-7b50-4db3-be81-a933153448da":{"id":"/providers/microsoft.powerapps/apis/shared_office365","displayName":"Office 365 Outlook","iconUri":"https://static.powerapps.com/resource/ppcr/releases/v1.0.1819/1.0.1819.4795/office365/icon.png","dataSources":[],"dependencies":[],"dependents":["2ff70fe8-450e-4fe9-b5d9-aca45d85595b"],"parameterHints":{},"parameterHintsV2":{},"isOnPremiseConnection":false,"bypassConsent":true,"dataSets":{},"apiTier":"Standard"},"490ec78c-15a0-4917-b88a-cf9a854bd8c1":{"id":"/providers/microsoft.powerapps/apis/shared_sharepointonline","displayName":"SharePoint","iconUri":"https://static.powerapps.com/resource/ppcr/releases/v1.0.1827/1.0.1827.4913/sharepointonline/icon.png","dataSources":[],"dependencies":[],"dependents":["2ff70fe8-450e-4fe9-b5d9-aca45d85595b"],"parameterHints":{},"parameterHintsV2":{},"isOnPremiseConnection":false,"bypassConsent":true,"dataSets":{},"apiTier":"Standard"},"0c46c3ce-d9c5-4b26-8c82-1176e15a70d7":{"id":"/providers/microsoft.powerapps/apis/shared_office365users","displayName":"Office 365 Users","iconUri":"https://static.powerapps.com/resource/ppcr/releases/v1.0.1818/1.0.1818.4788/office365users/icon.png","dataSources":[],"dependencies":[],"dependents":["2ff70fe8-450e-4fe9-b5d9-aca45d85595b"],"parameterHints":{},"parameterHintsV2":{},"isOnPremiseConnection":false,"bypassConsent":true,"dataSets":{},"apiTier":"Standard"}}</ConnectionReferences>
+  <DatabaseReferences>{}</DatabaseReferences>
+  <AppComponents>[]</AppComponents>
+  <AppComponentDependencies>[]</AppComponentDependencies>
+  <CanConsumeAppPass>1</CanConsumeAppPass>
+  <CanvasAppType>0</CanvasAppType>
+  <BypassConsent>1</BypassConsent>
+  <AdminControlBypassConsent>0</AdminControlBypassConsent>
+  <EmbeddedApp xsi:nil="true"></EmbeddedApp>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <CdsDependencies>{"cdsdependencies":[]}</CdsDependencies>
+  <IsCustomizable>1</IsCustomizable>
+  <BackgroundImageUri>/CanvasApps/cr10a_agudaform_6de3a_BackgroundImageUri</BackgroundImageUri>
+  <DocumentUri>/CanvasApps/cr10a_agudaform_6de3a_DocumentUri.msapp</DocumentUri>
+  <AdditionalUris>
+    <AdditionalUri>/CanvasApps/cr10a_agudaform_6de3a_AdditionalUris0_identity.json</AdditionalUri>
+  </AdditionalUris>
+</CanvasApp>

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{3853c697-378d-461c-bed5-d7773cdc8c0b}" Name="AddUserToGroup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <JsonFileName>/Workflows/AddUserToGroup-3853C697-378D-461C-BED5-D7773CDC8C0B.json</JsonFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>6</Category>
+  <Mode>0</Mode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>0</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <RunAs>1</RunAs>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <UIFlowType>2</UIFlowType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <Metadata>{"isvalid":true,"schemaVersion":"ROBIN_20211012","containsActiveConnections":false}</Metadata>
+  <Inputs>{"schema":{"properties":{"InputUserUdn":{"default":"","description":"","format":null,"title":"InputUserUdn","type":"string","value":""},"InputGroupID":{"default":"","description":"","format":null,"title":"InputGroupID","type":"string","value":""}},"type":"object"}}</Inputs>
+  <Outputs>{"schema":null}</Outputs>
+  <Dependencies>{"childFlows":[],"workQueues":[]}</Dependencies>
+  <ConnectionReferences>[]</ConnectionReferences>
+  <Definition>"@@ConnectionString: ''\r\n@@Type: 'Local'\r\n@@DesktopType: 'local'\r\n@@DisplayName: 'Local computer'\r\nIMPORT 'controlRepo.appmask' AS appmask\r\nIMPORT 'imageRepo.imgrepo' AS imgrepo\r\n@SENSITIVE: []\r\n@INPUT InputUserUdn : { 'Description': '', 'FriendlyName': 'InputUserUdn', 'DefaultValue': '', 'Type': 'String' } \r\n@INPUT InputGroupID : { 'Description': '', 'FriendlyName': 'InputGroupID', 'DefaultValue': '', 'Type': 'String' } \r\nLABEL 'Run from \\\"Call Add User to group\\\"'\r\nActiveDirectory.ConnectToServer.ConnectToServerWithAuthentication LdapPath: $'''LDAP://S-DC1.smkb.ac.il''' Username: $'''<REDACTED>''' Password: P'<REDACTED>' AuthenticationType: ActiveDirectory.AuthenticationTypes.Secure ParentDirectoryEntry=&gt; ParentDirectoryEntry\r\nActiveDirectory.ModifyGroup.AddUserToGroup ParentDirectoryEntry: ParentDirectoryEntry DistinguishedName: InputGroupID UserDistinguishedName: InputUserUdn\r\nActiveDirectory.CloseConnection ParentDirectoryEntry: ParentDirectoryEntry\r\n"</Definition>
+  <SchemaVersion>2022.06</SchemaVersion>
+  <DesktopFlowModules>[]</DesktopFlowModules>
+  <PrimaryEntity>none</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="AddUserToGroup" />
+  </LocalizedNames>
+</Workflow>
